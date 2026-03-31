@@ -1,0 +1,133 @@
+// ============================================================
+// Carbon Capital — Sistema de Gestão de Convênios Públicos
+// Schema Prisma 7 — Banco Neon (PostgreSQL)
+// ============================================================
+
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ----------------------------------------------------------
+// ENUMs
+// ----------------------------------------------------------
+
+enum Estado {
+  AC
+  AL
+  AM
+  AP
+  BA
+  CE
+  DF
+  ES
+  GO
+  MA
+  MG
+  MS
+  MT
+  PA
+  PB
+  PE
+  PI
+  PR
+  RJ
+  RN
+  RO
+  RR
+  RS
+  SC
+  SE
+  SP
+  TO
+}
+
+enum Parceiro {
+  AGEU
+  BR_PAGO
+  INST_VIDA
+  NEOCONSIG
+}
+
+enum InstituicaoFinanceira {
+  C_CARD
+  BR_PAGO
+  DIGIMAIS
+}
+
+enum Capag {
+  A_MAIS
+  A
+  B_MAIS
+  B
+  C
+  D
+  ND
+}
+
+enum Produto {
+  ANTECIPACAO_SALARIAL
+  CARTAO_BENEFICIO
+  CARTAO_CONSIGNADO
+  CB_ANTEC_SALARIAL
+  CC_ANTEC_SALARIAL
+  CC_CB
+  EMPRESTIMO
+  EMPRESTIMO_ANTEC_SALARIAL
+  EMPRESTIMO_CB
+  EMPRESTIMO_CC
+  EMPRESTIMO_CC_CB
+  TODOS
+}
+
+enum StatusConvenio {
+  CONVENIO_ASSINADO
+  CONVENIO_PENDENTE_ASSINATURA_PARTES
+  CONVENIO_PENDENTE_ASSINATURA_MUNICIPIO
+  CONVENIO_PUBLICADO_DIARIO_OFICIAL
+  KIT_ELABORADO_PENDENTE_ASSINATURA
+  KIT_EM_ELABORACAO
+  KIT_ENVIADO_CREDENCIAMENTO
+  OFICIO_ASSINADO
+  OFICIO_CANCELADO
+  OFICIO_ENVIADO_CREDENCIAMENTO
+  OFICIO_PENDENTE_ASSINATURA
+  OFICIO_PENDENTE_ELABORACAO
+  PROTOCOLADO
+}
+
+// ----------------------------------------------------------
+// MODELS
+// ----------------------------------------------------------
+
+model Convenio {
+  id                   String                @id @default(uuid())
+  estado               Estado
+  parceiro             Parceiro
+  institucaoFinanceira InstituicaoFinanceira?
+  capag                Capag?
+  bancos               String?               @db.VarChar(255)
+  processadora         String?               @db.VarChar(255)
+  orgaoCompetente      String?               @db.VarChar(255)
+  decreto              Boolean               @default(false)
+  produto              Produto
+  contratoConvenio     Boolean               @default(false)
+  prazoContrato        String?               @db.VarChar(100)
+  prorrogavel          Boolean               @default(false)
+  dataAssinatura       DateTime?             @db.Date
+  validade             DateTime?             @db.Date
+  status               StatusConvenio
+  dataObs              DateTime?             @db.Date
+  obs                  String?               @db.Text
+  funding              String?               @db.VarChar(255)
+  tx                   Decimal?              @db.Decimal(10, 4)
+  comissao             Decimal?              @db.Decimal(10, 4)
+  criadoEm             DateTime              @default(now())
+  atualizadoEm         DateTime              @updatedAt
+
+  @@map("convenios")
+}

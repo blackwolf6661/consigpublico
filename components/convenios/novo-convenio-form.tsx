@@ -303,7 +303,7 @@ export function NovoConvenioForm() {
               <input type="date" {...register("dataObs")} className={inputClass} />
             </FormField>
             <div className="sm:col-span-2">
-              <FormField label="OBS" error={errors.obs?.message}>
+              <FormField label="OBS" required error={errors.obs?.message}>
                 <textarea {...register("obs")} rows={3} placeholder="Observações adicionais..."
                   className={cn(inputClass, "resize-none")} />
               </FormField>

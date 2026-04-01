@@ -2,30 +2,32 @@ import { z } from "zod";
 
 // ─── Enums Zod (espelham o Prisma schema) ──────────────────────────────────────
 
+const enumMsg = { message: "Selecione uma das opções" };
+
 export const EstadoEnum = z.enum([
   "AC","AL","AM","AP","BA","CE","DF","ES","GO","MA",
   "MG","MS","MT","PA","PB","PE","PI","PR","RJ","RN",
   "RO","RR","RS","SC","SE","SP","TO",
-]);
+], enumMsg);
 
 export const ParceiroEnum = z.enum([
   "AGEU","BR_PAGO","INST_VIDA","NEOCONSIG",
-]);
+], enumMsg);
 
 export const InstituicaoFinanceiraEnum = z.enum([
   "C_CARD","BR_PAGO","DIGIMAIS",
-]);
+], enumMsg);
 
 export const CapagEnum = z.enum([
   "A_MAIS","A","B_MAIS","B","C","D","ND",
-]);
+], enumMsg);
 
 export const ProdutoEnum = z.enum([
   "ANTECIPACAO_SALARIAL","CARTAO_BENEFICIO","CARTAO_CONSIGNADO",
   "CB_ANTEC_SALARIAL","CC_ANTEC_SALARIAL","CC_CB",
   "EMPRESTIMO","EMPRESTIMO_ANTEC_SALARIAL","EMPRESTIMO_CB",
   "EMPRESTIMO_CC","EMPRESTIMO_CC_CB","TODOS",
-]);
+], enumMsg);
 
 export const StatusConvenioEnum = z.enum([
   "CONVENIO_ASSINADO",
@@ -41,7 +43,7 @@ export const StatusConvenioEnum = z.enum([
   "OFICIO_PENDENTE_ASSINATURA",
   "OFICIO_PENDENTE_ELABORACAO",
   "PROTOCOLADO",
-]);
+], enumMsg);
 
 // ─── Schema principal de criação de convênio ──────────────────────────────────
 
@@ -62,7 +64,7 @@ export const criarConvenioSchema = z.object({
   validade: z.string().optional().nullable(),
   status: StatusConvenioEnum,
   dataObs: z.string().optional().nullable(),
-  obs: z.string().optional().nullable(),
+  obs: z.string().min(1, "Observação é obrigatória"),
   funding: z.string().max(255).optional().nullable(),
   tx: z.number().min(0).max(100).optional().nullable(),
   comissao: z.number().min(0).max(100).optional().nullable(),
@@ -72,9 +74,7 @@ export type CriarConvenioInput = z.infer<typeof criarConvenioSchema>;
 
 // ─── Schema de edição (OBS obrigatória) ──────────────────────────────────────
 
-export const editarConvenioSchema = criarConvenioSchema.extend({
-  obs: z.string().min(1, "Observação é obrigatória"),
-});
+export const editarConvenioSchema = criarConvenioSchema;
 
 export type EditarConvenioInput = z.infer<typeof editarConvenioSchema>;
 

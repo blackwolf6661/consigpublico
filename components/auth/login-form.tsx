@@ -52,7 +52,7 @@ export function LoginForm({ initialError }: LoginFormProps) {
             Carbon Capital
           </h1>
           <p className="text-[13px] text-muted-foreground mt-0.5 font-medium">
-            Sistema ConsigPúblico
+            Sistema Convênios Públicos
           </p>
         </div>
       </div>

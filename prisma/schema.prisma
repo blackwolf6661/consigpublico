@@ -108,26 +108,26 @@ model Convenio {
   id                   String                @id @default(uuid())
   estado               Estado
   parceiro             Parceiro
-  institucaoFinanceira InstituicaoFinanceira?
+  institucaoFinanceira InstituicaoFinanceira? @map("instituicao_financeira")
   capag                Capag?
   bancos               String?               @db.VarChar(255)
   processadora         String?               @db.VarChar(255)
-  orgaoCompetente      String?               @db.VarChar(255)
+  orgaoCompetente      String?               @db.VarChar(255)  @map("orgao_competente")
   decreto              Boolean               @default(false)
   produto              Produto
-  contratoConvenio     Boolean               @default(false)
-  prazoContrato        String?               @db.VarChar(100)
+  contratoConvenio     Boolean               @default(false)   @map("contrato_convenio")
+  prazoContrato        String?               @db.VarChar(100)  @map("prazo_contrato")
   prorrogavel          Boolean               @default(false)
-  dataAssinatura       DateTime?             @db.Date
+  dataAssinatura       DateTime?             @db.Date          @map("data_assinatura")
   validade             DateTime?             @db.Date
   status               StatusConvenio
-  dataObs              DateTime?             @db.Date
+  dataObs              DateTime?             @db.Date          @map("data_obs")
   obs                  String?               @db.Text
   funding              String?               @db.VarChar(255)
   tx                   Decimal?              @db.Decimal(10, 4)
   comissao             Decimal?              @db.Decimal(10, 4)
-  criadoEm             DateTime              @default(now())
-  atualizadoEm         DateTime              @updatedAt
+  criadoEm             DateTime              @default(now())   @map("criado_em")
+  atualizadoEm         DateTime              @updatedAt        @map("atualizado_em")
 
-  @@map("convenios")
+  @@map("cp_convenios")
 }

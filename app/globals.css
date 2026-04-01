@@ -49,72 +49,82 @@
 }
 
 :root {
+  /* #ffffff — fundo principal */
   --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
+  /* #000000 — texto principal */
+  --foreground: oklch(0.09 0 0);
+  /* card levemente off-white */
+  --card: oklch(0.97 0 0);
+  --card-foreground: oklch(0.09 0 0);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
+  --popover-foreground: oklch(0.09 0 0);
+  /* #00d2c7 — teal primário */
+  --primary: oklch(0.77 0.13 192);
+  /* texto escuro sobre teal */
+  --primary-foreground: oklch(0.09 0 0);
+  /* cinza claro */
+  --secondary: oklch(0.93 0 0);
+  /* #161616 */
+  --secondary-foreground: oklch(0.12 0 0);
+  --muted: oklch(0.93 0 0);
+  --muted-foreground: oklch(0.48 0 0);
+  /* teal suave para hover/accent */
+  --accent: oklch(0.77 0.13 192 / 12%);
+  --accent-foreground: oklch(0.42 0.13 192);
+  --destructive: oklch(0.62 0.22 27);
+  /* bordas sutis */
+  --border: oklch(0 0 0 / 10%);
+  --input: oklch(0 0 0 / 10%);
+  --ring: oklch(0.77 0.13 192);
+  --chart-1: oklch(0.77 0.13 192);
+  --chart-2: oklch(0.68 0.18 255);
+  --chart-3: oklch(0.75 0.16 85);
+  --chart-4: oklch(0.68 0.2 320);
+  --chart-5: oklch(0.62 0.22 30);
   --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  /* sidebar glass — #161616 com 82% opacidade */
+  --sidebar: oklch(0.12 0 0 / 82%);
+  --sidebar-foreground: oklch(0.92 0 0);
+  --sidebar-primary: oklch(0.77 0.13 192);
+  --sidebar-primary-foreground: oklch(0.09 0 0);
+  --sidebar-accent: oklch(0.77 0.13 192 / 15%);
+  --sidebar-accent-foreground: oklch(0.77 0.13 192);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.77 0.13 192);
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --background: oklch(0.09 0 0);
+  --foreground: oklch(0.92 0 0);
+  --card: oklch(0.12 0 0);
+  --card-foreground: oklch(0.92 0 0);
+  --popover: oklch(0.12 0 0);
+  --popover-foreground: oklch(0.92 0 0);
+  --primary: oklch(0.77 0.13 192);
+  --primary-foreground: oklch(0.09 0 0);
+  --secondary: oklch(0.17 0 0);
+  --secondary-foreground: oklch(0.85 0 0);
+  --muted: oklch(0.17 0 0);
+  --muted-foreground: oklch(0.55 0 0);
+  --accent: oklch(0.77 0.13 192 / 15%);
+  --accent-foreground: oklch(0.77 0.13 192);
+  --destructive: oklch(0.65 0.22 27);
+  --border: oklch(1 0 0 / 8%);
+  --input: oklch(1 0 0 / 8%);
+  --ring: oklch(0.77 0.13 192);
+  --chart-1: oklch(0.77 0.13 192);
+  --chart-2: oklch(0.68 0.18 255);
+  --chart-3: oklch(0.75 0.16 85);
+  --chart-4: oklch(0.68 0.2 320);
+  --chart-5: oklch(0.62 0.22 30);
+  --sidebar: oklch(0.12 0 0);
+  --sidebar-foreground: oklch(0.85 0 0);
+  --sidebar-primary: oklch(0.77 0.13 192);
+  --sidebar-primary-foreground: oklch(0.09 0 0);
+  --sidebar-accent: oklch(0.77 0.13 192 / 15%);
+  --sidebar-accent-foreground: oklch(0.77 0.13 192);
+  --sidebar-border: oklch(1 0 0 / 8%);
+  --sidebar-ring: oklch(0.77 0.13 192);
 }
 
 @layer base {
@@ -128,3 +138,247 @@
     @apply font-sans;
   }
 }
+
+/* ══════════════════════════════════════════════════════════
+   DESIGN SYSTEM — Accounting Dashboard Reference
+   Exact animations, patterns and component classes
+══════════════════════════════════════════════════════════ */
+
+/* ── Keyframes ─────────────────────────────────────────── */
+@keyframes ds-fade-in-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes ds-slide-down {
+  from { opacity: 0; transform: translateY(-8px) scaleY(0.95); }
+  to   { opacity: 1; transform: translateY(0) scaleY(1); }
+}
+
+@keyframes ds-counter-pop {
+  0%   { opacity: 0; transform: translateY(10px); }
+  60%  { transform: translateY(-2px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes ds-graph-draw {
+  from { stroke-dashoffset: 800; opacity: 0; }
+  to   { stroke-dashoffset: 0;   opacity: 1; }
+}
+
+@keyframes ds-shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+/* ── Entrance animations ───────────────────────────────── */
+.ds-animate-in {
+  animation: ds-fade-in-up 0.4s cubic-bezier(.22,.68,0,1.2) both;
+}
+.ds-animate-in-1 { animation: ds-fade-in-up 0.4s cubic-bezier(.22,.68,0,1.2) 0.08s both; }
+.ds-animate-in-2 { animation: ds-fade-in-up 0.4s cubic-bezier(.22,.68,0,1.2) 0.16s both; }
+.ds-animate-in-3 { animation: ds-fade-in-up 0.4s cubic-bezier(.22,.68,0,1.2) 0.24s both; }
+.ds-animate-in-4 { animation: ds-fade-in-up 0.4s cubic-bezier(.22,.68,0,1.2) 0.32s both; }
+.ds-animate-in-5 { animation: ds-fade-in-up 0.4s cubic-bezier(.22,.68,0,1.2) 0.40s both; }
+
+/* ── Stat Card (.stat-card equivalent — brutalista offset shadow) */
+.ds-stat-card {
+  box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.10);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+.ds-stat-card:hover {
+  transform: translate(4px, 4px);
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0.10);
+}
+
+/* ── Circle icon button (.button-circle equivalent) ────── */
+.ds-btn-circle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  background: transparent;
+  color: var(--muted-foreground);
+  transition: all 0.15s ease;
+  cursor: pointer;
+  flex-shrink: 0;
+  text-decoration: none;
+  /* .button-circle box-shadow: 0 4px #575757 → adaptado */
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.15);
+}
+.ds-btn-circle:hover {
+  background: var(--secondary);
+  color: var(--foreground);
+  /* .button-circle:hover → transform: translate(0, 4px) + shadow flat */
+  transform: translateY(4px);
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0.15);
+}
+.ds-btn-circle:active {
+  transform: translateY(4px);
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0.15);
+}
+
+/* ── Date / filter buttons (.date-button equivalent) ───── */
+.ds-filter-btn {
+  display: inline-flex;
+  align-items: center;
+  height: 40px;
+  padding: 0 20px;
+  /* .date-button: border-radius: 40px */
+  border-radius: 40px;
+  border: 2px solid var(--border);
+  background: transparent;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--muted-foreground);
+  transition: all 0.15s ease;
+  cursor: pointer;
+  white-space: nowrap;
+  text-decoration: none;
+  font-family: inherit;
+}
+.ds-filter-btn:hover {
+  /* .date-button:hover: background-color: rgba(0,0,0,.1) */
+  background: rgba(0, 0, 0, 0.07);
+  color: var(--foreground);
+}
+.ds-filter-btn.ds-active {
+  /* .date-button.active: color:#fff; background-color:#000; box-shadow:4px 4px #575757 */
+  background: var(--foreground);
+  color: var(--background);
+  border-color: var(--foreground);
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.20);
+}
+
+/* ── Tab navigation (.tab-link/.body-top equivalent) ────── */
+.ds-tab-nav {
+  display: flex;
+  gap: 0;
+  /* .body-top: border-bottom: 3px solid #8e8e8e */
+  border-bottom: 3px solid var(--border);
+  margin-bottom: 48px;
+}
+.ds-tab-link {
+  display: inline-flex;
+  align-items: center;
+  /* .tab-link: padding-top:15px padding-bottom:20px */
+  padding: 15px 20px 20px;
+  /* .tab-link: font-size:22px → 18px app-adapted */
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--muted-foreground);
+  /* .tab-link: border-bottom: 3px solid transparent; margin-bottom: -3px */
+  border-bottom: 3px solid transparent;
+  margin-bottom: -3px;
+  /* .tab-link: margin-left:20px margin-right:20px */
+  transition: color 0.2s ease, border-color 0.2s ease;
+  text-decoration: none;
+  cursor: pointer;
+  white-space: nowrap;
+}
+/* .tab-link.first: margin-left:0 */
+.ds-tab-link:first-child { padding-left: 0; }
+/* .tab-link:hover, .tab-link.w--current */
+.ds-tab-link:hover { color: var(--foreground); }
+.ds-tab-link.ds-active {
+  color: var(--foreground);
+  font-weight: 600;
+  border-bottom-color: var(--foreground);
+}
+
+/* ── Legend dots (.legend-circle equivalent — 20px da referência) */
+.ds-legend {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  /* .legend-p: font-size:19px → 14px app-adapted */
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--muted-foreground);
+}
+.ds-legend-dot {
+  /* .legend-circle: width:20px height:20px */
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.ds-legend-dot-primary  { background: var(--primary); }
+.ds-legend-dot-dark     { background: var(--foreground); }
+.ds-legend-dot-muted    { background: var(--muted-foreground); }
+/* .legend-circle.outline: border: 3px solid #a3a7f5 */
+.ds-legend-dot-outline  { background: transparent; border: 3px solid var(--primary); }
+.ds-legend-dot-emerald  { background: #10b981; }
+.ds-legend-dot-amber    { background: #f59e0b; }
+
+/* ── Graph Card (.graph-card equivalent — background:#000, border-radius:25px) */
+.ds-graph-card {
+  /* .graph-card: background-color:#000; border-radius:25px; box-shadow:14px 14px #b0b0b0 */
+  border-radius: 25px;
+  overflow: hidden;
+  background: oklch(0.09 0 0);
+  color: #fff;
+  box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.12);
+}
+.ds-graph-card-top {
+  /* .graph-card__top: gap:70px → adaptado; margin-bottom:25px */
+  padding: 20px 36px 16px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 32px;
+}
+.ds-graph-card-bot {
+  /* .graph-card__bot: padding bottom:30px */
+  padding: 16px 36px 28px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* ── Income / data grid rows (.income-grid__wrap.border equivalent) */
+/* .income-grid__wrap.border: border:2px solid #525152; border-radius:20px; padding:20px 35px; margin-bottom:20px */
+.ds-grid-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  gap: 12px;
+  border: 2px solid var(--border);
+  border-radius: 16px;
+  margin-bottom: 12px;
+  transition: background 0.15s ease;
+}
+.ds-grid-row:last-child {
+  margin-bottom: 0;
+}
+.ds-grid-row:hover {
+  background: var(--secondary);
+}
+
+/* ── Dropdown menu (.dd-list / .w-dropdown-list) ────────── */
+.ds-dropdown-menu {
+  animation: ds-slide-down 0.18s ease both;
+  transform-origin: top center;
+}
+
+/* ── Graph SVG line draw animation ─────────────────────── */
+.ds-graph-path {
+  stroke-dasharray: 800;
+  animation: ds-graph-draw 1.2s cubic-bezier(.4,0,.2,1) 0.3s both;
+}
+
+/* ── Number counter pop animation ──────────────────────── */
+.ds-number {
+  animation: ds-counter-pop 0.5s cubic-bezier(.22,.68,0,1.4) both;
+}
+.ds-number-1 { animation-delay: 0.08s; }
+.ds-number-2 { animation-delay: 0.16s; }
+.ds-number-3 { animation-delay: 0.24s; }
+.ds-number-4 { animation-delay: 0.32s; }
+.ds-number-5 { animation-delay: 0.40s; }

@@ -15,21 +15,18 @@ const HUB_ORIGIN =
 export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl;
   const ssoToken = searchParams.get("sso_token");
-  const hubOrigin = searchParams.get("hub_origin");
 
   // ─── Parâmetros obrigatórios ──────────────────────────────────────────────
-  if (!ssoToken || !hubOrigin) {
+  if (!ssoToken) {
     return NextResponse.redirect(
       new URL("/login?error=sso_params_missing", request.url)
     );
   }
 
-  // ─── Validar origem (segurança) ───────────────────────────────────────────
-  if (!hubOrigin.startsWith(HUB_ORIGIN)) {
-    return NextResponse.redirect(
-      new URL("/login?error=sso_untrusted_origin", request.url)
-    );
-  }
+  // Sempre usa HUB_ORIGIN do env — ignora hub_origin da URL para evitar
+  // inconsistências (trailing slash, subdomínio, etc.)
+  const hubOrigin = HUB_ORIGIN;
+  console.log(`[SSO] Usando Hub: ${hubOrigin}`);
 
   try {
     // ─── Chamar validate-sso no Hub ─────────────────────────────────────────

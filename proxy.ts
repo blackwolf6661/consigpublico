@@ -11,7 +11,23 @@ function secret() {
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  // ─── Rotas de API passam direto (incluindo /api/auth/sso) ────────────────
+  if (pathname.startsWith("/api/")) {
+    return NextResponse.next();
+  }
+
   const token = request.cookies.get(SESSION_COOKIE)?.value;
+
+  // ─── SSO: detectar sso_token na URL e encaminhar para o route handler ─────
+  const ssoToken = request.nextUrl.searchParams.get("sso_token");
+  const hubOrigin = request.nextUrl.searchParams.get("hub_origin");
+
+  if (ssoToken && hubOrigin && !token) {
+    const ssoUrl = new URL("/api/auth/sso", request.url);
+    ssoUrl.searchParams.set("sso_token", ssoToken);
+    ssoUrl.searchParams.set("hub_origin", hubOrigin);
+    return NextResponse.redirect(ssoUrl);
+  }
 
   // ─── Rota de login: redireciona pra home se já autenticado ────────────────
   if (pathname.startsWith("/login")) {

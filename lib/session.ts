@@ -16,23 +16,32 @@ function secret() {
   return new TextEncoder().encode(s);
 }
 
-// ─── Criar sessão (cookie HTTP-only) ─────────────────────────────────────────
+// ─── Opções do cookie (reutilizadas no route handler SSO) ───────────────────
 
-export async function createSession(payload: SessionPayload) {
-  const token = await new SignJWT({ ...payload })
+export const COOKIE_OPTIONS = {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production",
+  sameSite: "lax" as const,
+  path: "/",
+  maxAge: EXPIRES_SECONDS,
+};
+
+// ─── Assinar token JWT (reutilizado no route handler SSO) ─────────────────────
+
+export async function signSessionToken(payload: SessionPayload): Promise<string> {
+  return new SignJWT({ ...payload })
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
     .setExpirationTime(`${EXPIRES_SECONDS}s`)
     .sign(secret());
+}
 
+// ─── Criar sessão (cookie HTTP-only) ─────────────────────────────────────────
+
+export async function createSession(payload: SessionPayload) {
+  const token = await signSessionToken(payload);
   const cookieStore = await cookies();
-  cookieStore.set(SESSION_COOKIE, token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    path: "/",
-    maxAge: EXPIRES_SECONDS,
-  });
+  cookieStore.set(SESSION_COOKIE, token, COOKIE_OPTIONS);
 }
 
 // ─── Ler sessão (Server Component / Server Action) ────────────────────────────

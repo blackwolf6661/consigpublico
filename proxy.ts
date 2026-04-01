@@ -20,9 +20,13 @@ export async function proxy(request: NextRequest) {
 
   // ─── SSO: detectar sso_token na URL e encaminhar para o route handler ─────
   const ssoToken = request.nextUrl.searchParams.get("sso_token");
-  const hubOrigin = request.nextUrl.searchParams.get("hub_origin");
+  // hub_origin é opcional — se não vier, usa HUB_ORIGIN do env
+  const hubOrigin =
+    request.nextUrl.searchParams.get("hub_origin") ??
+    process.env.HUB_ORIGIN ??
+    "https://carboncapital.vercel.app";
 
-  if (ssoToken && hubOrigin && !token) {
+  if (ssoToken && !token) {
     const ssoUrl = new URL("/api/auth/sso", request.url);
     ssoUrl.searchParams.set("sso_token", ssoToken);
     ssoUrl.searchParams.set("hub_origin", hubOrigin);

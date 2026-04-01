@@ -33,6 +33,8 @@ export async function GET(request: NextRequest) {
 
   try {
     // ─── Chamar validate-sso no Hub ─────────────────────────────────────────
+    console.log(`[SSO] Validando token no Hub: ${hubOrigin}/api/auth/validate-sso`);
+
     const res = await fetch(`${hubOrigin}/api/auth/validate-sso`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -40,20 +42,30 @@ export async function GET(request: NextRequest) {
       cache: "no-store",
     });
 
-    if (!res.ok) {
-      throw new Error(`validate-sso HTTP ${res.status}`);
+    // Ler JSON independente do status HTTP (Hub retorna 401 para token inválido)
+    let data: { valid: boolean; error?: string; user?: { id: string; email: string; name?: string; acessos?: string[]; role?: string } };
+    try {
+      data = await res.json();
+    } catch {
+      console.error(`[SSO] Resposta não-JSON do Hub (HTTP ${res.status})`);
+      return NextResponse.redirect(new URL("/login?error=sso_error", request.url));
     }
 
-    const data = await res.json();
+    console.log(`[SSO] Resposta do Hub (HTTP ${res.status}):`, JSON.stringify(data));
 
     if (!data.valid) {
+      console.warn(`[SSO] Token inválido pelo Hub: ${data.error}`);
       return NextResponse.redirect(
         new URL("/login?error=sso_invalid", request.url)
       );
     }
 
     // ─── Verificar acesso ao sistema ────────────────────────────────────────
-    if (!Array.isArray(data.user?.acessos) || !data.user.acessos.includes(PROJECT_KEY)) {
+    const acessos = data.user?.acessos ?? [];
+    console.log(`[SSO] Acessos do usuário: ${JSON.stringify(acessos)}`);
+
+    if (!acessos.includes(PROJECT_KEY)) {
+      console.warn(`[SSO] Usuário sem acesso '${PROJECT_KEY}': ${data.user?.email}`);
       return NextResponse.redirect(
         new URL("/login?error=sso_no_access", request.url)
       );
@@ -61,18 +73,19 @@ export async function GET(request: NextRequest) {
 
     // ─── Criar sessão local e redirecionar ──────────────────────────────────
     const payload: SessionPayload = {
-      sub: data.user.id,
-      email: data.user.email,
-      nome: data.user.name ?? data.user.email,
+      sub: data.user!.id,
+      email: data.user!.email,
+      nome: data.user!.name ?? data.user!.email,
     };
 
+    console.log(`[SSO] Sessão criada para: ${payload.email}`);
     const jwt = await signSessionToken(payload);
     const response = NextResponse.redirect(new URL("/", request.url));
     response.cookies.set(SESSION_COOKIE, jwt, COOKIE_OPTIONS);
     return response;
 
   } catch (err) {
-    console.error("[SSO] Erro ao validar token:", err);
+    console.error("[SSO] Erro inesperado:", err);
     return NextResponse.redirect(
       new URL("/login?error=sso_error", request.url)
     );

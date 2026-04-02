@@ -220,7 +220,23 @@ const PRODUTO_COLORS  = ["#00d2c7", "#3b82f6", "#8b5cf6", "#f59e0b", "#10b981"];
 // ─── Dashboard Page ────────────────────────────────────────────────────────────
 
 export default async function DashboardPage() {
-  const stats = await getEstatisticasDashboard();
+  let stats: Awaited<ReturnType<typeof getEstatisticasDashboard>>;
+  try {
+    stats = await getEstatisticasDashboard();
+  } catch (err) {
+    // Loga o erro completo nos Function Logs do Vercel
+    console.error("[DashboardPage] ERRO AO CARREGAR ESTATÍSTICAS:");
+    console.error("[DashboardPage] type:", typeof err);
+    if (err instanceof Error) {
+      console.error("[DashboardPage] name:", err.name);
+      console.error("[DashboardPage] message:", err.message);
+      console.error("[DashboardPage] stack:", err.stack);
+      if ((err as NodeJS.ErrnoException).cause) console.error("[DashboardPage] cause:", (err as NodeJS.ErrnoException).cause);
+    } else {
+      console.error("[DashboardPage] raw:", String(err));
+    }
+    throw err; // re-throw para o error boundary capturar
+  }
 
   const kpis = [
     { title: "Total",      value: stats.totalConvenios,     description: "Todos os registros",    icon: FileText,     variant: "default" as StatVariant, delay: 1 },

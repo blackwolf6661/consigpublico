@@ -479,3 +479,12 @@ export async function criarParceiro(
     return { success: false, error: "Parceiro já existe" };
   }
 }
+
+export async function deletarParceiro(nome: string): Promise<ActionResult> {
+  try {
+    await prisma.parceiroOption.delete({ where: { nome } });
+    return { success: true, data: undefined };
+  } catch {
+    return { success: false, error: "Erro ao excluir parceiro" };
+  }
+}

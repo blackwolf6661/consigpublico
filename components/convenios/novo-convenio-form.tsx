@@ -8,11 +8,12 @@ import { toast } from "sonner";
 import { ArrowLeft, Loader2, Save, CheckCircle2, ExternalLink, RotateCcw, Copy } from "lucide-react";
 import Link from "next/link";
 import { criarConvenioSchema, type CriarConvenioInput } from "@/lib/validations";
-import { criarConvenio, type ConvenioSalvo } from "@/actions/convenios";
+import { criarConvenio, type ConvenioSalvo, type ParceiroRow } from "@/actions/convenios";
 import {
-  ESTADOS, PARCEIROS, INSTITUICOES_FINANCEIRAS, CAPAGS, PRODUTOS, STATUSES,
+  ESTADOS, INSTITUICOES_FINANCEIRAS, CAPAGS, PRODUTOS, STATUSES,
   ESTADO_LABELS, PARCEIRO_LABELS, PRODUTO_LABELS, STATUS_LABELS, STATUS_COLORS, CAPAG_LABELS,
 } from "@/lib/constants";
+import { ParceiroCombobox } from "@/components/convenios/parceiro-combobox";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 
@@ -84,9 +85,9 @@ function SuccessDialog({
   };
 
   const campos: [string, string][] = [
-    ["Estado", `${convenio.estado} — ${ESTADO_LABELS[convenio.estado as keyof typeof ESTADO_LABELS]}`],
-    ["Parceiro", PARCEIRO_LABELS[convenio.parceiro as keyof typeof PARCEIRO_LABELS]],
-    ["Produto", PRODUTO_LABELS[convenio.produto as keyof typeof PRODUTO_LABELS]],
+    ...(convenio.estado ? [["Estado", `${convenio.estado} — ${ESTADO_LABELS[convenio.estado as keyof typeof ESTADO_LABELS] ?? convenio.estado}`] as [string, string]] : []),
+    ...(convenio.parceiro ? [["Parceiro", PARCEIRO_LABELS[convenio.parceiro as keyof typeof PARCEIRO_LABELS] ?? convenio.parceiro] as [string, string]] : []),
+    ...(convenio.produto ? [["Produto", PRODUTO_LABELS[convenio.produto as keyof typeof PRODUTO_LABELS] ?? convenio.produto] as [string, string]] : []),
     ...(convenio.capag ? [["CAPAG", CAPAG_LABELS[convenio.capag as keyof typeof CAPAG_LABELS]] as [string, string]] : []),
     ...(convenio.tx ? [["TX", `${Number(convenio.tx).toFixed(4)}%`] as [string, string]] : []),
     ...(convenio.comissao ? [["Comissão", `${Number(convenio.comissao).toFixed(4)}%`] as [string, string]] : []),
@@ -132,6 +133,7 @@ function SuccessDialog({
           </div>
 
           {/* Status badge */}
+          {convenio.status && (
           <div className="flex items-center justify-between rounded-lg bg-secondary/40 px-3 py-2">
             <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Status</span>
             <span className={cn(
@@ -141,6 +143,7 @@ function SuccessDialog({
               {STATUS_LABELS[convenio.status as keyof typeof STATUS_LABELS]}
             </span>
           </div>
+          )}
         </div>
 
         {/* Ações */}
@@ -163,7 +166,7 @@ function SuccessDialog({
 
 // ─── Formulário principal ─────────────────────────────────────────────────────
 
-export function NovoConvenioForm() {
+export function NovoConvenioForm({ parceiros }: { parceiros: ParceiroRow[] }) {
   const router = useRouter();
   const [convenioSalvo, setConvenioSalvo] = useState<ConvenioSalvo | null>(null);
 
@@ -187,7 +190,7 @@ export function NovoConvenioForm() {
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
         {/* ── Identificação ─────────────────────────────────────────────── */}
         <Section title="Identificação" description="Dados de identificação do convênio">
-          <FormField label="Estado" error={errors.estado?.message} required>
+          <FormField label="Estado" error={errors.estado?.message}>
             <select {...register("estado")} className={selectClass}>
               <option value="">Selecione um estado</option>
               {ESTADOS.map((e) => (
@@ -196,11 +199,19 @@ export function NovoConvenioForm() {
             </select>
           </FormField>
 
-          <FormField label="Parceiro" error={errors.parceiro?.message} required>
-            <select {...register("parceiro")} className={selectClass}>
-              <option value="">Selecione um parceiro</option>
-              {PARCEIROS.map((p) => (<option key={p.value} value={p.value}>{p.label}</option>))}
-            </select>
+          <FormField label="Parceiro" error={errors.parceiro?.message}>
+            <Controller
+              control={control}
+              name="parceiro"
+              render={({ field }) => (
+                <ParceiroCombobox
+                  parceiros={parceiros}
+                  value={field.value ?? ""}
+                  onChange={field.onChange}
+                  error={errors.parceiro?.message}
+                />
+              )}
+            />
           </FormField>
 
           <FormField label="Instituição Financeira (IF)" error={errors.institucaoFinanceira?.message}>
@@ -217,14 +228,14 @@ export function NovoConvenioForm() {
             </select>
           </FormField>
 
-          <FormField label="Produto" error={errors.produto?.message} required>
+          <FormField label="Produto" error={errors.produto?.message}>
             <select {...register("produto")} className={selectClass}>
               <option value="">Selecione um produto</option>
               {PRODUTOS.map((p) => (<option key={p.value} value={p.value}>{p.label}</option>))}
             </select>
           </FormField>
 
-          <FormField label="Status" error={errors.status?.message} required>
+          <FormField label="Status" error={errors.status?.message}>
             <select {...register("status")} className={selectClass}>
               <option value="">Selecione um status</option>
               {STATUSES.map((s) => (<option key={s.value} value={s.value}>{s.label}</option>))}

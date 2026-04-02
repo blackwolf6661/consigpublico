@@ -10,9 +10,7 @@ export const EstadoEnum = z.enum([
   "RO","RR","RS","SC","SE","SP","TO",
 ], enumMsg);
 
-export const ParceiroEnum = z.enum([
-  "AGEU","BR_PAGO","INST_VIDA","NEOCONSIG",
-], enumMsg);
+// ParceiroEnum removido — parceiro agora é string livre (tabela cp_parceiros)
 
 export const InstituicaoFinanceiraEnum = z.enum([
   "C_CARD","BR_PAGO","DIGIMAIS",
@@ -48,21 +46,21 @@ export const StatusConvenioEnum = z.enum([
 // ─── Schema principal de criação de convênio ──────────────────────────────────
 
 export const criarConvenioSchema = z.object({
-  estado: EstadoEnum,
-  parceiro: ParceiroEnum,
+  estado: EstadoEnum.optional().nullable(),
+  parceiro: z.string().optional().nullable(),
   institucaoFinanceira: InstituicaoFinanceiraEnum.optional().nullable(),
   capag: CapagEnum.optional().nullable(),
   bancos: z.string().max(255).optional().nullable(),
   processadora: z.string().max(255).optional().nullable(),
   orgaoCompetente: z.string().max(255).optional().nullable(),
   decreto: z.boolean(),
-  produto: ProdutoEnum,
+  produto: ProdutoEnum.optional().nullable(),
   contratoConvenio: z.boolean(),
   prazoContrato: z.string().max(100).optional().nullable(),
   prorrogavel: z.boolean(),
   dataAssinatura: z.string().optional().nullable(),
   validade: z.string().optional().nullable(),
-  status: StatusConvenioEnum,
+  status: StatusConvenioEnum.optional().nullable(),
   dataObs: z.string().optional().nullable(),
   obs: z.string().min(1, "Observação é obrigatória"),
   funding: z.string().max(255).optional().nullable(),
@@ -86,7 +84,7 @@ export const filtrosConvenioSchema = z.object({
   search: z.string().optional(),
   status: StatusConvenioEnum.optional(),
   estado: EstadoEnum.optional(),
-  parceiro: ParceiroEnum.optional(),
+  parceiro: z.string().optional(),
 });
 
 export type FiltrosConvenioInput = z.infer<typeof filtrosConvenioSchema>;

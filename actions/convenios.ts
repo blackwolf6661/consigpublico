@@ -21,10 +21,10 @@ export type ConvenioComId = Awaited<ReturnType<typeof listarConvenios>>["conveni
 
 export type ConvenioSalvo = {
   id: string;
-  estado: string;
-  parceiro: string;
-  produto: string;
-  status: string;
+  estado: string | null;
+  parceiro: string | null;
+  produto: string | null;
+  status: string | null;
   capag: string | null;
   tx: string | null;
   comissao: string | null;
@@ -39,21 +39,21 @@ export async function criarConvenio(
 
     const convenio = await prisma.convenio.create({
       data: {
-        estado: dados.estado,
-        parceiro: dados.parceiro,
+        estado: dados.estado ?? null,
+        parceiro: dados.parceiro ?? null,
         institucaoFinanceira: dados.institucaoFinanceira ?? undefined,
         capag: dados.capag ?? undefined,
         bancos: dados.bancos ?? null,
         processadora: dados.processadora ?? null,
         orgaoCompetente: dados.orgaoCompetente ?? null,
         decreto: dados.decreto,
-        produto: dados.produto,
+        produto: dados.produto ?? null,
         contratoConvenio: dados.contratoConvenio,
         prazoContrato: dados.prazoContrato ?? null,
         prorrogavel: dados.prorrogavel,
         dataAssinatura: dados.dataAssinatura ? new Date(dados.dataAssinatura) : null,
         validade: dados.validade ? new Date(dados.validade) : null,
-        status: dados.status,
+        status: dados.status ?? null,
         dataObs: dados.dataObs ? new Date(dados.dataObs) : null,
         obs: dados.obs ?? null,
         funding: dados.funding ?? null,
@@ -199,21 +199,21 @@ export async function excluirConvenio(id: string): Promise<ActionResult> {
 
 export type ConvenioParaEditar = {
   id: string;
-  estado: string;
-  parceiro: string;
+  estado: string | null;
+  parceiro: string | null;
   institucaoFinanceira: string | null;
   capag: string | null;
   bancos: string | null;
   processadora: string | null;
   orgaoCompetente: string | null;
   decreto: boolean;
-  produto: string;
+  produto: string | null;
   contratoConvenio: boolean;
   prazoContrato: string | null;
   prorrogavel: boolean;
   dataAssinatura: string | null; // "YYYY-MM-DD"
   validade: string | null;       // "YYYY-MM-DD"
-  status: string;
+  status: string | null;
   dataObs: string | null;        // "YYYY-MM-DD"
   obs: string | null;
   funding: string | null;
@@ -266,21 +266,21 @@ export async function editarConvenio(
     const convenio = await prisma.convenio.update({
       where: { id },
       data: {
-        estado: dados.estado,
-        parceiro: dados.parceiro,
+        estado: dados.estado ?? null,
+        parceiro: dados.parceiro ?? null,
         institucaoFinanceira: dados.institucaoFinanceira ?? undefined,
         capag: dados.capag ?? undefined,
         bancos: dados.bancos ?? null,
         processadora: dados.processadora ?? null,
         orgaoCompetente: dados.orgaoCompetente ?? null,
         decreto: dados.decreto,
-        produto: dados.produto,
+        produto: dados.produto ?? null,
         contratoConvenio: dados.contratoConvenio,
         prazoContrato: dados.prazoContrato ?? null,
         prorrogavel: dados.prorrogavel,
         dataAssinatura: dados.dataAssinatura ? new Date(dados.dataAssinatura) : null,
         validade: dados.validade ? new Date(dados.validade) : null,
-        status: dados.status,
+        status: dados.status ?? null,
         dataObs: dados.dataObs ? new Date(dados.dataObs) : null,
         obs: dados.obs ?? null,
         funding: dados.funding ?? null,
@@ -439,4 +439,43 @@ export async function getEstatisticasDashboard() {
     porProduto,
     dadosMensais,
   };
+}
+
+// ─── Parceiros ───────────────────────────────────────────────────────────────
+
+export type ParceiroRow = { id: string; nome: string; label: string };
+
+export async function listarParceiros(): Promise<ParceiroRow[]> {
+  const rows = await prisma.parceiroOption.findMany({
+    orderBy: { criadoEm: "asc" },
+    select: { id: true, nome: true, label: true },
+  });
+  return rows;
+}
+
+export async function criarParceiro(
+  label: string
+): Promise<ActionResult<ParceiroRow>> {
+  const labelTrimmed = label.trim();
+  if (!labelTrimmed) return { success: false, error: "Nome inválido" };
+
+  // Gera slug: remove acentos, converte espaços em _, uppercase
+  const nome = labelTrimmed
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-zA-Z0-9 ]/g, "")
+    .trim()
+    .replace(/\s+/g, "_")
+    .toUpperCase();
+
+  try {
+    const row = await prisma.parceiroOption.upsert({
+      where: { nome },
+      update: { label: labelTrimmed },
+      create: { nome, label: labelTrimmed },
+    });
+    return { success: true, data: { id: row.id, nome: row.nome, label: row.label } };
+  } catch {
+    return { success: false, error: "Parceiro já existe" };
+  }
 }

@@ -1,14 +1,14 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
-import { buscarConvenio } from "@/actions/convenios";
+import { buscarConvenio, listarParceiros } from "@/actions/convenios";
 import { EditarConvenioForm } from "@/components/convenios/editar-convenio-form";
 import {
   ESTADO_LABELS,
   PARCEIRO_LABELS,
   PRODUTO_LABELS,
 } from "@/lib/constants";
-import type { Estado, Parceiro, Produto } from "@/lib/constants";
+import type { Estado, Produto } from "@/lib/constants";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -16,13 +16,16 @@ interface PageProps {
 
 export default async function EditarConvenioPage({ params }: PageProps) {
   const { id } = await params;
-  const convenio = await buscarConvenio(id);
+  const [convenio, parceiros] = await Promise.all([
+    buscarConvenio(id),
+    listarParceiros(),
+  ]);
 
   if (!convenio) notFound();
 
-  const estadoLabel  = ESTADO_LABELS[convenio.estado as Estado]   ?? convenio.estado;
-  const parceiroLabel = PARCEIRO_LABELS[convenio.parceiro as Parceiro] ?? convenio.parceiro;
-  const produtoLabel  = PRODUTO_LABELS[convenio.produto as Produto]  ?? convenio.produto;
+  const estadoLabel   = convenio.estado  ? (ESTADO_LABELS[convenio.estado as Estado]   ?? convenio.estado)  : "—";
+  const parceiroLabel = convenio.parceiro ? (PARCEIRO_LABELS[convenio.parceiro as keyof typeof PARCEIRO_LABELS] ?? convenio.parceiro) : "—";
+  const produtoLabel  = convenio.produto  ? (PRODUTO_LABELS[convenio.produto as Produto]  ?? convenio.produto)  : "—";
 
   return (
     <div className="p-6">
@@ -52,7 +55,7 @@ export default async function EditarConvenioPage({ params }: PageProps) {
       </div>
 
       {/* Formulário */}
-      <EditarConvenioForm convenio={convenio} />
+      <EditarConvenioForm convenio={convenio} parceiros={parceiros} />
     </div>
   );
 }

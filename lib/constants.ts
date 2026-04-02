@@ -1,6 +1,6 @@
 // Tipos espelhados do schema Prisma (evita dependência direta do client gerado)
 export type Estado = "AC"|"AL"|"AM"|"AP"|"BA"|"CE"|"DF"|"ES"|"GO"|"MA"|"MG"|"MS"|"MT"|"PA"|"PB"|"PE"|"PI"|"PR"|"RJ"|"RN"|"RO"|"RR"|"RS"|"SC"|"SE"|"SP"|"TO";
-export type Parceiro = "AGEU"|"BR_PAGO"|"INST_VIDA"|"NEOCONSIG";
+export type Parceiro = string;
 export type InstituicaoFinanceira = "C_CARD"|"BR_PAGO"|"DIGIMAIS";
 export type Capag = "A_MAIS"|"A"|"B_MAIS"|"B"|"C"|"D"|"ND";
 export type Produto = "ANTECIPACAO_SALARIAL"|"CARTAO_BENEFICIO"|"CARTAO_CONSIGNADO"|"CB_ANTEC_SALARIAL"|"CC_ANTEC_SALARIAL"|"CC_CB"|"EMPRESTIMO"|"EMPRESTIMO_ANTEC_SALARIAL"|"EMPRESTIMO_CB"|"EMPRESTIMO_CC"|"EMPRESTIMO_CC_CB"|"TODOS";
@@ -18,7 +18,7 @@ export const ESTADO_LABELS: Record<Estado, string> = {
   SC: "Santa Catarina", SE: "Sergipe", SP: "São Paulo", TO: "Tocantins",
 };
 
-export const PARCEIRO_LABELS: Record<Parceiro, string> = {
+export const PARCEIRO_LABELS: Record<string, string> = {
   AGEU: "AGEU",
   BR_PAGO: "BR PAGO",
   INST_VIDA: "INST VIDA",
@@ -97,7 +97,7 @@ export const ESTADOS = Object.entries(ESTADO_LABELS).map(([value, label]) => ({
 }));
 
 export const PARCEIROS = Object.entries(PARCEIRO_LABELS).map(([value, label]) => ({
-  value: value as Parceiro, label,
+  value, label,
 }));
 
 export const INSTITUICOES_FINANCEIRAS = Object.entries(IF_LABELS).map(([value, label]) => ({

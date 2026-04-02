@@ -8,11 +8,12 @@ import { toast } from "sonner";
 import { ArrowLeft, Loader2, Save } from "lucide-react";
 import Link from "next/link";
 import { editarConvenioSchema, type EditarConvenioInput } from "@/lib/validations";
-import { editarConvenio, type ConvenioParaEditar } from "@/actions/convenios";
+import { editarConvenio, type ConvenioParaEditar, type ParceiroRow } from "@/actions/convenios";
 import {
-  ESTADOS, PARCEIROS, INSTITUICOES_FINANCEIRAS, CAPAGS, PRODUTOS, STATUSES,
+  ESTADOS, INSTITUICOES_FINANCEIRAS, CAPAGS, PRODUTOS, STATUSES,
 } from "@/lib/constants";
 import { cn } from "@/lib/utils";
+import { ParceiroCombobox } from "@/components/convenios/parceiro-combobox";
 
 // ─── Helpers de estilo ────────────────────────────────────────────────────────
 
@@ -108,9 +109,10 @@ function Section({
 
 interface EditarConvenioFormProps {
   convenio: ConvenioParaEditar;
+  parceiros: ParceiroRow[];
 }
 
-export function EditarConvenioForm({ convenio }: EditarConvenioFormProps) {
+export function EditarConvenioForm({ convenio, parceiros }: EditarConvenioFormProps) {
   const router = useRouter();
   const [salvando, setSalvando] = useState(false);
 
@@ -122,21 +124,21 @@ export function EditarConvenioForm({ convenio }: EditarConvenioFormProps) {
   } = useForm<EditarConvenioInput>({
     resolver: zodResolver(editarConvenioSchema),
     defaultValues: {
-      estado: convenio.estado as EditarConvenioInput["estado"],
-      parceiro: convenio.parceiro as EditarConvenioInput["parceiro"],
+      estado: (convenio.estado ?? undefined) as EditarConvenioInput["estado"],
+      parceiro: convenio.parceiro ?? undefined,
       institucaoFinanceira: (convenio.institucaoFinanceira ?? undefined) as EditarConvenioInput["institucaoFinanceira"],
       capag: (convenio.capag ?? undefined) as EditarConvenioInput["capag"],
       bancos: convenio.bancos ?? undefined,
       processadora: convenio.processadora ?? undefined,
       orgaoCompetente: convenio.orgaoCompetente ?? undefined,
       decreto: convenio.decreto,
-      produto: convenio.produto as EditarConvenioInput["produto"],
+      produto: (convenio.produto ?? undefined) as EditarConvenioInput["produto"],
       contratoConvenio: convenio.contratoConvenio,
       prazoContrato: convenio.prazoContrato ?? undefined,
       prorrogavel: convenio.prorrogavel,
       dataAssinatura: convenio.dataAssinatura ?? undefined,
       validade: convenio.validade ?? undefined,
-      status: convenio.status as EditarConvenioInput["status"],
+      status: (convenio.status ?? undefined) as EditarConvenioInput["status"],
       dataObs: convenio.dataObs ?? undefined,
       obs: convenio.obs ?? undefined,
       funding: convenio.funding ?? undefined,
@@ -165,7 +167,7 @@ export function EditarConvenioForm({ convenio }: EditarConvenioFormProps) {
 
       {/* ── Identificação ─────────────────────────────────────────────── */}
       <Section title="Identificação" description="Dados de identificação do convênio">
-        <FormField label="Estado" error={errors.estado?.message} required>
+        <FormField label="Estado" error={errors.estado?.message}>
           <select {...register("estado")} className={selectClass}>
             <option value="">Selecione um estado</option>
             {ESTADOS.map((e) => (
@@ -176,13 +178,19 @@ export function EditarConvenioForm({ convenio }: EditarConvenioFormProps) {
           </select>
         </FormField>
 
-        <FormField label="Parceiro" error={errors.parceiro?.message} required>
-          <select {...register("parceiro")} className={selectClass}>
-            <option value="">Selecione um parceiro</option>
-            {PARCEIROS.map((p) => (
-              <option key={p.value} value={p.value}>{p.label}</option>
-            ))}
-          </select>
+        <FormField label="Parceiro" error={errors.parceiro?.message}>
+          <Controller
+            control={control}
+            name="parceiro"
+            render={({ field }) => (
+              <ParceiroCombobox
+                parceiros={parceiros}
+                value={field.value ?? ""}
+                onChange={field.onChange}
+                error={errors.parceiro?.message}
+              />
+            )}
+          />
         </FormField>
 
         <FormField label="Instituição Financeira (IF)" error={errors.institucaoFinanceira?.message}>
@@ -203,7 +211,7 @@ export function EditarConvenioForm({ convenio }: EditarConvenioFormProps) {
           </select>
         </FormField>
 
-        <FormField label="Produto" error={errors.produto?.message} required>
+        <FormField label="Produto" error={errors.produto?.message}>
           <select {...register("produto")} className={selectClass}>
             <option value="">Selecione um produto</option>
             {PRODUTOS.map((p) => (
@@ -212,7 +220,7 @@ export function EditarConvenioForm({ convenio }: EditarConvenioFormProps) {
           </select>
         </FormField>
 
-        <FormField label="Status" error={errors.status?.message} required>
+        <FormField label="Status" error={errors.status?.message}>
           <select {...register("status")} className={selectClass}>
             <option value="">Selecione um status</option>
             {STATUSES.map((s) => (

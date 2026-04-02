@@ -372,30 +372,34 @@ export async function getEstatisticasDashboard() {
     prisma.convenio.count({ where: { contratoConvenio: false } }),
     prisma.convenio.count({ where: { prorrogavel: true } }),
     prisma.convenio.count({ where: { decreto: true } }),
-    // Por status — ordenado por volume decrescente
+    // Por status — ordenado por volume decrescente (exclui null)
     prisma.convenio.groupBy({
       by: ["status"],
       _count: { _all: true },
+      where: { status: { not: null } },
       orderBy: { _count: { status: "desc" } },
     }),
-    // Top 5 estados
+    // Top 5 estados (exclui null)
     prisma.convenio.groupBy({
       by: ["estado"],
       _count: { _all: true },
       take: 5,
+      where: { estado: { not: null } },
       orderBy: { _count: { estado: "desc" } },
     }),
-    // Por parceiro (todos)
+    // Por parceiro (todos, exclui null)
     prisma.convenio.groupBy({
       by: ["parceiro"],
       _count: { _all: true },
+      where: { parceiro: { not: null } },
       orderBy: { _count: { parceiro: "desc" } },
     }),
-    // Top 5 produtos
+    // Top 5 produtos (exclui null)
     prisma.convenio.groupBy({
       by: ["produto"],
       _count: { _all: true },
       take: 5,
+      where: { produto: { not: null } },
       orderBy: { _count: { produto: "desc" } },
     }),
     // Registros dos últimos 6 meses para o gráfico de linha

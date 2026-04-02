@@ -180,7 +180,8 @@ function GraphCard({ stats }: { stats: Stats }) {
 
 // ─── Status dot color ─────────────────────────────────────────────────────────
 
-function getStatusColor(status: string): string {
+function getStatusColor(status: string | null | undefined): string {
+  if (!status) return "#94a3b8";
   if (status.includes("ASSINADO"))                                   return "#10b981";
   if (status.includes("PENDENTE") || status.includes("ELABORA"))    return "#f59e0b";
   if (status.includes("PUBLICADO") || status.includes("DIARIO"))    return "#3b82f6";
@@ -192,14 +193,14 @@ function getStatusColor(status: string): string {
 
 // ─── Status Row (distribuição por status) ─────────────────────────────────────
 
-function StatusRow({ status, count, total }: { status: StatusConvenio; count: number; total: number }) {
+function StatusRow({ status, count, total }: { status: StatusConvenio | null; count: number; total: number }) {
   const pct   = total > 0 ? (count / total) * 100 : 0;
   const color = getStatusColor(status);
   return (
     <div className="ds-grid-row">
       <div className="flex items-center gap-3">
         <div className="ds-legend-dot" style={{ background: color }} />
-        <span className="text-[13px] font-medium text-foreground">{STATUS_LABELS[status]}</span>
+        <span className="text-[13px] font-medium text-foreground">{status ? STATUS_LABELS[status] ?? status : "(sem status)"}</span>
       </div>
       <div className="flex items-center gap-3">
         <span className="text-[13px] font-bold text-foreground tabular-nums">{count}</span>
@@ -339,8 +340,8 @@ export default async function DashboardPage() {
               ) : (
                 stats.porStatus.map((s) => (
                   <StatusRow
-                    key={s.status}
-                    status={s.status as StatusConvenio}
+                    key={s.status ?? "__null__"}
+                    status={s.status as StatusConvenio | null}
                     count={s._count._all}
                     total={stats.totalConvenios}
                   />

@@ -168,7 +168,7 @@ export function EditarConvenioForm({ convenio, parceiros }: EditarConvenioFormPr
       {/* ── Identificação ─────────────────────────────────────────────── */}
       <Section title="Identificação" description="Dados de identificação do convênio">
         <FormField label="Estado" error={errors.estado?.message}>
-          <select {...register("estado")} className={selectClass}>
+          <select {...register("estado", { setValueAs: (v: string) => v === "" ? null : v })} className={selectClass}>
             <option value="">Selecione um estado</option>
             {ESTADOS.map((e) => (
               <option key={e.value} value={e.value}>
@@ -194,7 +194,7 @@ export function EditarConvenioForm({ convenio, parceiros }: EditarConvenioFormPr
         </FormField>
 
         <FormField label="Instituição Financeira (IF)" error={errors.institucaoFinanceira?.message}>
-          <select {...register("institucaoFinanceira")} className={selectClass}>
+          <select {...register("institucaoFinanceira", { setValueAs: (v: string) => v === "" ? null : v })} className={selectClass}>
             <option value="">Selecione (opcional)</option>
             {INSTITUICOES_FINANCEIRAS.map((i) => (
               <option key={i.value} value={i.value}>{i.label}</option>
@@ -203,7 +203,7 @@ export function EditarConvenioForm({ convenio, parceiros }: EditarConvenioFormPr
         </FormField>
 
         <FormField label="CAPAG" error={errors.capag?.message}>
-          <select {...register("capag")} className={selectClass}>
+          <select {...register("capag", { setValueAs: (v: string) => v === "" ? null : v })} className={selectClass}>
             <option value="">Selecione (opcional)</option>
             {CAPAGS.map((c) => (
               <option key={c.value} value={c.value}>{c.label}</option>
@@ -212,7 +212,7 @@ export function EditarConvenioForm({ convenio, parceiros }: EditarConvenioFormPr
         </FormField>
 
         <FormField label="Produto" error={errors.produto?.message}>
-          <select {...register("produto")} className={selectClass}>
+          <select {...register("produto", { setValueAs: (v: string) => v === "" ? null : v })} className={selectClass}>
             <option value="">Selecione um produto</option>
             {PRODUTOS.map((p) => (
               <option key={p.value} value={p.value}>{p.label}</option>
@@ -221,7 +221,7 @@ export function EditarConvenioForm({ convenio, parceiros }: EditarConvenioFormPr
         </FormField>
 
         <FormField label="Status" error={errors.status?.message}>
-          <select {...register("status")} className={selectClass}>
+          <select {...register("status", { setValueAs: (v: string) => v === "" ? null : v })} className={selectClass}>
             <option value="">Selecione um status</option>
             {STATUSES.map((s) => (
               <option key={s.value} value={s.value}>{s.label}</option>
